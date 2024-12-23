@@ -1,17 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const SignupForm = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch('/api/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+    const data = await response.json();
+    setMessage(data.message);
+    if (data.success) {
+      router.push('/');
+    }
+  };
+
   return (
     <div className="flex items-center justify-center h-screen w-screen bg-gradient-to-r from-teal-300 via-green-200 to-green-400">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow">
         <h2 className="text-2xl font-bold text-center">Sign Up</h2>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
             <input
               type="text"
-              id="name"
-              placeholder="Enter your name"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username"
               className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
             />
           </div>
@@ -29,6 +54,8 @@ const SignupForm = () => {
             <input
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
             />
@@ -40,6 +67,7 @@ const SignupForm = () => {
             Sign Up
           </button>
         </form>
+        {message && <p className="text-sm text-center text-red-500">{message}</p>}
         <p className="text-sm text-center text-gray-600">
           Already have an account? <a href="/login" className="text-blue-500">Login</a>
         </p>
