@@ -2,6 +2,7 @@
 import connectDB from '../../utils/db';
 import User from '../../models/User';
 import bcrypt from 'bcryptjs';
+import { serialize } from 'cookie';
 
 export default async (req, res) => {
   await connectDB();
@@ -20,6 +21,7 @@ export default async (req, res) => {
     }
 
     console.log(`Hi ${username}`);
+    res.setHeader('Set-Cookie', serialize('username', username, { path: '/' }));
     res.status(200).json({ success: true, message: 'Login successful', username });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error' });

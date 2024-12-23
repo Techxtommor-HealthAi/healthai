@@ -1,7 +1,8 @@
 import Navbar from "@/components/navabar";
 import Typewriter from "typewriter-effect";
+import { parseCookies } from 'nookies';
 
-export default function Home() {
+export default function Home({ username }) {
   const cards = [
     { title: "Personalized AI", description: "Get tailored advice just for you." },
     { title: "Chat with AI Doctor", description: "Talk to your AI doctor anytime." },
@@ -19,7 +20,7 @@ export default function Home() {
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center space-y-6">
         <h1 className="text-4xl md:text-6xl font-bold text-slate-950">
-          Hii! username, I am your AI Doctor.
+          Hii! {username}, I am your AI Doctor.
           <br/>{" "}
          
           <span className="text-blue-500 text-5xl ">
@@ -67,5 +68,13 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const cookies = parseCookies(context);
+  const username = cookies.username || 'Guest';
+  return {
+    props: { username },
+  };
 }
 
