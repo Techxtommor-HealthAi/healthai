@@ -96,8 +96,6 @@ const Chatbot = () => {
   const handleAudioRecord = () => {
     if (isListening) {
       setIsListening(false);
-      console.log(speechResult);
-      setInput(speechResult);
     } else {
       setSpeechResult('');
       handleVoiceInput();
