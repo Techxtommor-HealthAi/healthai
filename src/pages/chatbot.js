@@ -97,12 +97,12 @@ const Chatbot = () => {
     if (isListening) {
       setIsListening(false);
       console.log(speechResult);
-      const newMessage = { type: 'user', content: speechResult, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setInput(speechResult);
     } else {
       setSpeechResult('');
       handleVoiceInput();
     }
+    
   };
 
   const handleTextToSpeech = (text) => {
@@ -181,6 +181,7 @@ const Chatbot = () => {
             </button>
             <div className="relative flex-1">
               <input
+                id = "inputchatbox"
                 type="text"
                 placeholder="Take a follow-up on your health by asking queries..."
                 value={input}
