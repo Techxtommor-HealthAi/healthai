@@ -88,6 +88,7 @@ const Chatbot = () => {
 
     recognition.onend = () => {
       setIsListening(false);
+      setInput(speechResult); // Set the input value to the speech result
     };
 
     recognition.start();
@@ -96,11 +97,11 @@ const Chatbot = () => {
   const handleAudioRecord = () => {
     if (isListening) {
       setIsListening(false);
+      setInput(speechResult); // Set the input value to the speech result
     } else {
       setSpeechResult('');
       handleVoiceInput();
     }
-    
   };
 
   const handleTextToSpeech = (text) => {
@@ -197,7 +198,7 @@ const Chatbot = () => {
             </div>
             <button
               className="flex items-center px-4 py-2 text-white bg-blue-500 rounded-3xl hover:bg-blue-600 focus:outline-none"
-              onClick={handleSend}
+              onClick={handleSend}  
             >
               Send
               <img src="/sendtext.svg" alt="Send" className="w-5 h-5 ml-2" />
