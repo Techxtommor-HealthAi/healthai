@@ -41,7 +41,7 @@ export default function Home({ username }) {
         <h1 className="text-4xl md:text-5xl font-bold text-slate-950">
           Hi {username}, I am your AI Doctor.
           <br />{" "}
-          <span className="text-blue-500 text-4xl">
+          <span className="text-green-700 text-4xl">
             <Typewriter
               options={{
                 strings: [

@@ -2,7 +2,7 @@ import React from "react";
 import { Heart, Circle, Brain } from "lucide-react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import Navbar from "@/components/navabar";
+
 
 const PatientDashboard = () => {
   const bodyCompositionData = {
@@ -34,12 +34,16 @@ const PatientDashboard = () => {
   ];
 
   return (
+    <div>
+        <header className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-slate-400 to-slate-300 text-white">
+          <h1 className="text-lg font-bold">T4T: AI Doctor 🤖</h1>
+          <button className="focus:outline-none">
+            <img src="/settings.svg" alt="Settings" className="w-6 h-6" />
+          </button>
+        </header>
+   
     <div className="min-h-screen bg-slate-300 p-8">
-        {/* <div className="mb-4 bg-white shadow-md">
-        <div className="px-4 py-2 ">
-          <Navbar />
-        </div>
-      </div> */}
+      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
         <div className="flex">
           {/* Patient Info Card */}
@@ -272,6 +276,7 @@ const PatientDashboard = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
