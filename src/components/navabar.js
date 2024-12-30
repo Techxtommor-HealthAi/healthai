@@ -75,12 +75,20 @@ export default function Navbar() {
             </Link>
           
           {isLoggedIn ? (
+            <>
+            <Link
+              href="/modelgarden"
+              className="text-xl text-[#EFE3C2] hover:text-blue-400 font-semibold"
+            >
+              SpecialistDoctors
+            </Link>
             <Link
               href="/dashboard"
               className="text-xl text-[#EFE3C2] hover:text-blue-400 font-semibold"
             >
               Dashboard
             </Link>
+          </>
           ) : (
             <Link
               href="/contact"

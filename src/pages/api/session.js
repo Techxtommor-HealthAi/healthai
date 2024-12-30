@@ -32,6 +32,8 @@ export default async function handler(req, res) {
       success: true,
       user: {
         username: user.username,
+        sex: user.sex,
+        age: user.age,
       },
     });
   } catch (err) {
