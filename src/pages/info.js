@@ -14,6 +14,7 @@ const Info = () => {
     { name: "history", path: "/medicaldata/history" },
     { name: "reports", path: "/medicaldata/reports" },
     { name: "userinfo", path: "/userinfo" },
+    { name: "modelgarden", path: "/modelgarden" },
     // Add more pages here, excluding those in the api folder
   ];
 
