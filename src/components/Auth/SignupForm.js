@@ -5,6 +5,8 @@ import Link from 'next/link';
 const SignupForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [sex, setSex] = useState('');
+  const [age, setAge] = useState('');
   const [message, setMessage] = useState('');
   const router = useRouter();
 
@@ -15,12 +17,12 @@ const SignupForm = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password,sex,age }),
     });
     const data = await response.json();
     setMessage(data.message);
     if (data.success) {
-      router.push('/');
+      router.push('/login');
     }
   };
 
@@ -49,6 +51,32 @@ const SignupForm = () => {
               className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
             />
           </div>
+          <div className="flex space-x-4">
+        <div className="flex-1">
+          <label htmlFor="sex" className="block text-sm font-medium text-gray-700">Sex</label>
+          <select
+            id="sex"
+            value={sex}
+            onChange={(e) => setSex(e.target.value)}
+            className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+          >
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div className="flex-1">
+          <label htmlFor="age" className="block text-sm font-medium text-gray-700">Age</label>
+          <input
+            type="number"
+            id="age"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            placeholder="Enter your age"
+            className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+          />
+        </div>
+      </div>
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input

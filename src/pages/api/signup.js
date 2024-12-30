@@ -6,8 +6,9 @@ import bcrypt from 'bcryptjs';
 export default async function handler(req, res) {
   await connectDB();
 
-  const { username, password } = req.body;
+  const { username, password, sex, age } = req.body;
 
+  
   try {
     let user = await User.findOne({ username });
     if (user) {
@@ -18,6 +19,8 @@ export default async function handler(req, res) {
     user = new User({
       username,
       password: await bcrypt.hash(password, 10),
+      sex,
+      age,
     });
 
     await user.save();
