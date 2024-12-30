@@ -9,12 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^4.22.0",
+    "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "mongoose": "^8.9.2",
     "next": "15.1.2",
     "nookies": "^2.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "tfjs": "^0.6.0",
     "typewriter-effect": "^2.21.0"
   },
   "devDependencies": {
