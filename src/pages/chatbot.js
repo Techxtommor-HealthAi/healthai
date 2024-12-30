@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
+import React, { useState, useEffect } from "react";
+import Head from "next/head";
 import Link from "next/link";
-import { createWorker } from 'tesseract.js';
+import { createWorker } from "tesseract.js";
+import Nav from "@/components/nav";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
-    { type: 'bot', content: "Hello! I'm your personal AI Assistant Doctor.", timestamp: '10:25' },
+    {
+      type: "bot",
+      content: "Hello! I'm your personal AI Assistant Doctor.",
+      timestamp: "10:25",
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [speechResult, setSpeechResult] = useState('');
+  const [speechResult, setSpeechResult] = useState("");
 
   useEffect(() => {
     setIsTyping(!!input.trim());
@@ -20,13 +25,27 @@ const Chatbot = () => {
 
   const handleSend = () => {
     if (input.trim()) {
-      const newMessage = { type: 'user', content: input.trim(), timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+      const newMessage = {
+        type: "user",
+        content: input.trim(),
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
       setMessages([...messages, newMessage]);
-      setInput('');
+      setInput("");
       setIsLoading(true);
 
       setTimeout(() => {
-        const botResponse = { type: 'bot', content: "I'm here to help!", timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+        const botResponse = {
+          type: "bot",
+          content: "I'm here to help!",
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        };
         setMessages((prevMessages) => [...prevMessages, botResponse]);
         setIsLoading(false);
       }, 1500);
@@ -34,19 +53,22 @@ const Chatbot = () => {
   };
 
   const handleFileUpload = () => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
     fileInput.onchange = async (event) => {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = async () => {
           const newMessage = {
-            type: 'user',
+            type: "user",
             content: reader.result, // Base64 encoded image data
             isImage: true,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            timestamp: new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
           };
           setMessages((prevMessages) => [...prevMessages, newMessage]);
 
@@ -56,9 +78,12 @@ const Chatbot = () => {
           await worker.initialize("eng");
           const { data } = await worker.recognize(reader.result);
           const ocrMessage = {
-            type: 'bot',
+            type: "bot",
             content: data.text,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            timestamp: new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
           };
           setMessages((prevMessages) => [...prevMessages, ocrMessage]);
           await worker.terminate();
@@ -70,7 +95,8 @@ const Chatbot = () => {
   };
 
   const handleVoiceInput = () => {
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    const recognition = new (window.SpeechRecognition ||
+      window.webkitSpeechRecognition)();
     recognition.lang = "en-US";
     recognition.interimResults = true;
     recognition.continuous = true;
@@ -81,9 +107,9 @@ const Chatbot = () => {
 
     recognition.onresult = (event) => {
       const transcript = Array.from(event.results)
-        .map(result => result[0])
-        .map(result => result.transcript)
-        .join('');
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
       setSpeechResult(transcript);
     };
 
@@ -100,7 +126,7 @@ const Chatbot = () => {
       setIsListening(false);
       setInput(speechResult); // Set the input value to the speech result
     } else {
-      setSpeechResult('');
+      setSpeechResult("");
       handleVoiceInput();
     }
   };
@@ -125,40 +151,45 @@ const Chatbot = () => {
         <title>Chatbot</title>
       </Head>
       <div className="flex flex-col h-screen font-sans bg-gray-100">
-      <header className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-[#488e77] to-[#87d7bc] text-gray-800">
-        <Link
-          href="/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
-          <img
-            src="/logo.jpeg" // Place your logo in the `public` folder of your Next.js project
-            alt="Logo"
-            className="h-10 rounded-full w-35"
-          />
-        </Link>
-          <button className="focus:outline-none">
-            <img src="/settings.svg" alt="Settings" className="w-6 h-6" />
-          </button>
-        </header>
+        <Nav />
 
         <main className="flex flex-col flex-1 p-4 overflow-y-auto">
           <div className="flex flex-col flex-1 mb-4 space-y-4">
             {messages.map((message, index) => (
-              <div key={index} className={`flex ${message.type === 'bot' ? '' : 'flex-row-reverse'} items-start space-x-2`}>
+              <div
+                key={index}
+                className={`flex ${
+                  message.type === "bot" ? "" : "flex-row-reverse"
+                } items-start space-x-2`}
+              >
                 <span className="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                  {message.type === 'bot' ? 'SL' : 'U'}
+                  {message.type === "bot" ? "SL" : "U"}
                 </span>
-                <div className={`max-w-xs px-4 py-2 rounded-3xl shadow relative ${message.type === 'user' ? 'bg-gradient-to-r from-teal-500 to-green-400 text-white' : 'bg-gray-200'}`}>
-                {message.isImage ? (
-                  <>
-                    <img src={message.content} alt="Uploaded content" className="rounded-lg max-w-full" />
-                    {message.type === 'bot' && <p className="text-gray-600 mt-2">{message.content}</p>}
-                  </>
-                ) : (
-                  <p>{message.content}</p>
+                <div
+                  className={`max-w-xs px-4 py-2 rounded-3xl shadow relative ${
+                    message.type === "user"
+                      ? "bg-gradient-to-r from-teal-500 to-green-400 text-white"
+                      : "bg-gray-200"
+                  }`}
+                >
+                  {message.isImage ? (
+                    <>
+                      <img
+                        src={message.content}
+                        alt="Uploaded content"
+                        className="rounded-lg max-w-full"
+                      />
+                      {message.type === "bot" && (
+                        <p className="text-gray-600 mt-2">{message.content}</p>
+                      )}
+                    </>
+                  ) : (
+                    <p>{message.content}</p>
                   )}
-                   <span className="text-xs text-gray-500">{message.timestamp}</span>
-                  {message.type === 'bot' && (
+                  <span className="text-xs text-gray-500">
+                    {message.timestamp}
+                  </span>
+                  {message.type === "bot" && (
                     <button
                       onClick={() => handleTextToSpeech(message.content)}
                       className="absolute  bottom-1 right-1 px-3 py-0.5 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
@@ -171,7 +202,9 @@ const Chatbot = () => {
             ))}
             {isLoading && (
               <div className="flex items-center space-x-2">
-                <span className="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">SL</span>
+                <span className="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                  SL
+                </span>
                 <div className="flex space-x-1">
                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
@@ -182,20 +215,32 @@ const Chatbot = () => {
           </div>
 
           <div className="flex items-center space-x-2 sticky bottom-0">
-            <button className={`p-2 bg-gray-200 rounded-full focus:outline-none ${isListening ? 'animate-pulse' : ''}`} onClick={handleAudioRecord}>
+            <button
+              className={`p-2 bg-gray-200 rounded-full focus:outline-none ${
+                isListening ? "animate-pulse" : ""
+              }`}
+              onClick={handleAudioRecord}
+            >
               <img src="/mic.svg" alt="Record Audio" className="w-5 h-5" />
             </button>
-            <button className="p-2 bg-gray-200 rounded-full focus:outline-none" onClick={handleFileUpload}>
-              <img src="/attachfile.svg" alt="Attach File" className="w-5 h-5" />
+            <button
+              className="p-2 bg-gray-200 rounded-full focus:outline-none"
+              onClick={handleFileUpload}
+            >
+              <img
+                src="/attachfile.svg"
+                alt="Attach File"
+                className="w-5 h-5"
+              />
             </button>
             <div className="relative flex-1">
               <input
-                id = "inputchatbox"
+                id="inputchatbox"
                 type="text"
                 placeholder="Take a follow-up on your health by asking queries..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 className="w-full px-4 py-2 border rounded-3xl focus:outline-none focus:ring focus:ring-teal-400"
               />
               {isTyping && (
@@ -208,7 +253,7 @@ const Chatbot = () => {
             </div>
             <button
               className="flex items-center px-4 py-2 text-white bg-blue-500 rounded-3xl hover:bg-blue-600 focus:outline-none"
-              onClick={handleSend}  
+              onClick={handleSend}
             >
               Send
               <img src="/sendtext.svg" alt="Send" className="w-5 h-5 ml-2" />
@@ -235,4 +280,3 @@ const Chatbot = () => {
 };
 
 export default Chatbot;
-

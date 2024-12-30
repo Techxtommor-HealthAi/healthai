@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Heart, Circle, Brain } from "lucide-react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import Nav from "@/components/nav";
 
 
 
@@ -40,21 +41,7 @@ const PatientDashboard = () => {
 
   return (
     <div>
-        <header className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-[#488e77] to-[#87d7bc] text-gray-800">
-        <Link
-          href="/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
-          <img
-            src="/logo.jpeg" // Place your logo in the `public` folder of your Next.js project
-            alt="Logo"
-            className="h-10 rounded-full w-35"
-          />
-        </Link>
-          <button className="focus:outline-none">
-            <img src="/settings.svg" alt="Settings" className="w-6 h-6" />
-          </button>
-        </header>
+      <Nav/>
    
     <div className="min-h-screen  bg-[#e6f2ee] p-8">
       

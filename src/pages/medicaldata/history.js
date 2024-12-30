@@ -199,52 +199,6 @@ export default function HealthHistory() {
               </div>
             </div>
 
-            {/* Allergies Section */}
-            <div>
-              <h2 className="text-xl font-bold text-teal-600 mb-4">Allergy</h2>
-              <div className="flex flex-wrap gap-4">
-                {allergies.map((allergy, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleAddSelectedAllergy(allergy)}
-                    className="px-4 py-2 bg-purple-100 text-purple-700 font-semibold rounded-full hover:bg-purple-200"
-                  >
-                    {allergy}
-                  </button>
-                ))}
-              </div>
-              <div className="mt-4 flex gap-4">
-                <select
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                  className="flex-1 px-4 py-2 border rounded-lg focus:outline-purple-500"
-                >
-                  <option value="" disabled>
-                    Select Duration
-                  </option>
-                  <option value="1 month">1 month</option>
-                  <option value="6 months">6 months</option>
-                  <option value="1 year">1 year</option>
-                  <option value="2+ years">2+ years</option>
-                </select>
-                </div>
-                < div className="mt-4 flex gap-4">
-                <input
-                  type="text"
-                  value={customInput}
-                  onChange={(e) => setCustomInput(e.target.value)}
-                  placeholder="Add a different allergy"
-                  className="flex-1 px-4 py-2 border rounded-lg focus:outline-purple-500"
-                />
-                <button
-                  onClick={handleAddAllergy}
-                  className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
-                >
-                  Add
-                </button>
-              </div>
-            </div>
-
             {/* Navigation Buttons */}
             <div className="mt-8 flex justify-between">
               <button
@@ -289,16 +243,7 @@ export default function HealthHistory() {
                 ))}
               </ul>
             </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">Allergies:</h3>
-              <ul className="list-disc pl-5">
-                {selectedAllergies.map((item, index) => (
-                  <li key={index}>
-                    {item.allergy} - {item.duration}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          
             <button
               onClick={handleSubmit}
               className="px-6 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
