@@ -1,7 +1,10 @@
 import React from "react";
+import Link from "next/link";
 import { Heart, Circle, Brain } from "lucide-react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+
+
 
 
 const PatientDashboard = () => {
@@ -27,27 +30,38 @@ const PatientDashboard = () => {
     bmiColor = "#FF5722"; // Obese - Red
   }
 
-  
+
 
   const monthlyData = [
     8.0, 9.5, 2.0, 4.0, 7.0, 1.0, 5.0, 4.5, 3.0, 2.0, 5.0, 6.0,
   ];
 
+
+
   return (
     <div>
-        <header className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-slate-400 to-slate-300 text-white">
-          <h1 className="text-lg font-bold">T4T: AI Doctor 🤖</h1>
+        <header className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-[#488e77] to-[#87d7bc] text-gray-800">
+        <Link
+          href="/"
+          className="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <img
+            src="/logo.jpeg" // Place your logo in the `public` folder of your Next.js project
+            alt="Logo"
+            className="h-10 rounded-full w-35"
+          />
+        </Link>
           <button className="focus:outline-none">
             <img src="/settings.svg" alt="Settings" className="w-6 h-6" />
           </button>
         </header>
    
-    <div className="min-h-screen bg-slate-300 p-8">
+    <div className="min-h-screen  bg-[#e6f2ee] p-8">
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
         <div className="flex">
           {/* Patient Info Card */}
-          <div className="w-2/3 bg-white p-6  rounded-xl shadow-sm hover:border-2 hover:border-green-500 flex justify-between items-start space-x-4">
+          <div className="w-2/3 bg-white p-6  rounded-xl backdrop-blur-lg shadow-xl hover:border-2 hover:border-green-500 flex justify-between items-start space-x-4">
             {/* Left Section: Patient Info */}
             <div className="flex-1">
               <div className="flex items-center space-x-4">
@@ -58,7 +72,7 @@ const PatientDashboard = () => {
                 />
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800">
-                    Andrien Bertrand
+                    Andrien Bertran 
                   </h2>
                   <p className="text-gray-500 text-sm">
                     Last Checkup: 04 Jan 2022
@@ -99,7 +113,7 @@ const PatientDashboard = () => {
             </div>
           </div>
           {/* Right Section: BMI Gauge */}
-          <div className="w-1/3 bg-white p-6 ml-4 rounded-xl shadow-sm hover:border-2 hover:border-green-500  space-x-4 items-center">
+          <div className="w-1/3 bg-white p-6 ml-4 rounded-xl backdrop-blur-lg shadow-xl hover:border-2 hover:border-green-500  space-x-4 items-center">
             <h3 className="text-gray-800 font-medium mb-4 text-center">
               BMI Gauge
             </h3>
@@ -125,7 +139,7 @@ const PatientDashboard = () => {
         </div>
 
         {/* Body Composition Card */}
-        <div className="bg-white p-6 rounded-xl shadow-sm hover:border-2 hover:border-green-500">
+        <div className="bg-white p-6 rounded-xl backdrop-blur-lg shadow-xl hover:border-2 hover:border-green-500">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Body Composition
           </h2>
@@ -156,10 +170,10 @@ const PatientDashboard = () => {
 
         {/* Organ Health Card */}
 
-        <div className="bg-white p-6 rounded-xl shadow-sm hover:border-2 hover:border-green-500">
+        <div className="bg-white p-6 rounded-xl backdrop-blur-lg shadow-xl hover:border-2 hover:border-green-500">
           <div className="mb-6">
             {/* Remedies Box */}
-            <div className="bg-gray-200 rounded-lg p-4 shadow-sm mb-4">
+            <div className="bg-green-50 rounded-lg p-4 backdrop-blur-lg shadow-xl mb-4">
               <span className="font-semibold text-gray-700">Remedies:</span>
               <ul className="list-decimal list-inside text-gray-600 mt-2">
                 <li>Remedy 1</li>
@@ -168,7 +182,7 @@ const PatientDashboard = () => {
               </ul>
             </div>
             {/* Top Recommendations Box */}
-            <div className="bg-gray-200 rounded-lg p-4 shadow-sm">
+            <div className="bg-green-50 rounded-lg p-4 backdrop-blur-lg shadow-xl">
               <span className="font-semibold text-gray-700">
                 Top Recommendations:
               </span>
@@ -185,7 +199,7 @@ const PatientDashboard = () => {
           {/* Bottom Section */}
           <div className="grid grid-cols-1 md:grid-cols-8 gap-4 mt-6">
         {/* Health Risk Scores */}
-        <div className="col-span-2 bg-white p-6 rounded-xl shadow-sm hover:border-2 hover:border-green-500">
+        <div className="col-span-2 bg-white p-6 rounded-xl backdrop-blur-lg shadow-xl hover:border-2 hover:border-green-500">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Health Risk Scores
           </h2>
@@ -232,7 +246,7 @@ const PatientDashboard = () => {
         </div>
 
         {/* Chat with AI */}
-        <div className="col-span-2 bg-white p-6 rounded-xl shadow-sm hover:border-2 hover:border-green-500">
+        <div className="col-span-2 bg-white p-6 rounded-xl backdrop-blur-lg shadow-xl hover:border-2 hover:border-green-500">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Chat with AI
           </h2>
@@ -259,7 +273,7 @@ const PatientDashboard = () => {
         </div>
 
         {/* Calories Stats with variable width */}
-        <div className="col-span-4 bg-white p-6 rounded-xl shadow-sm hover:border-2 hover:border-green-500">
+        <div className="col-span-4 bg-white p-6 rounded-xl backdrop-blur-lg shadow-xl hover:border-2 hover:border-green-500">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Calories Stats
           </h2>
@@ -277,7 +291,7 @@ const PatientDashboard = () => {
         </div>
       </div>
     </div>
-    </div>
+     </div>
   );
 };
 

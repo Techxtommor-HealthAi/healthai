@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Link from "next/link";
 import { createWorker } from 'tesseract.js';
 
 const Chatbot = () => {
@@ -124,8 +125,17 @@ const Chatbot = () => {
         <title>Chatbot</title>
       </Head>
       <div className="flex flex-col h-screen font-sans bg-gray-100">
-        <header className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-teal-500 to-green-400 text-gray-800">
-          <h1 className="text-lg font-bold">T4T: AI Doctor 🤖</h1>
+      <header className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-[#488e77] to-[#87d7bc] text-gray-800">
+        <Link
+          href="/"
+          className="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <img
+            src="/logo.jpeg" // Place your logo in the `public` folder of your Next.js project
+            alt="Logo"
+            className="h-10 rounded-full w-35"
+          />
+        </Link>
           <button className="focus:outline-none">
             <img src="/settings.svg" alt="Settings" className="w-6 h-6" />
           </button>
