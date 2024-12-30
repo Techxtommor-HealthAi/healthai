@@ -8,6 +8,9 @@ export default function ModelGarden() {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [activeTab, setActiveTab] = useState("Interpretation");
+  const [aiContent, setAiContent] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
 
   const models = [
     {
@@ -92,14 +95,37 @@ export default function ModelGarden() {
     }
   };
 
+  const fetchAIContent = async (tab) => {
+    if (!results) {
+      alert("Please run a diagnosis first.");
+      return;
+    }
+
+    setAiLoading(true);
+    setAiContent(null);
+
+    const prompt =
+      tab === "Interpretation"
+        ? `Assume role of Specialist Doctor, Provide an interpretation for the diagnostic result: ${results.class} with ${results.confidence} confidence in short.`
+        : `Assume role of Specialist Doctor, Provide an consultation advise for the diagnostic result: ${results.class} with ${results.confidence} confidence in short.`;
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8001/generate", { prompt });
+      setAiContent(response.data.response);
+    } catch (error) {
+      console.error("Error fetching AI content:", error);
+      alert("Failed to fetch content from AI.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-[rgb(129,230,217)] via-[rgb(198,246,213)] to-[rgb(104,211,145)] flex items-center justify-center font-mono">
       <div className="w-4/5 h-[90vh] max-w-6xl p-8 bg-white/30 backdrop-blur-md rounded-[50px] shadow-lg">
         <h1 className="text-5xl font-bold text-center mb-8">Garden of Diagnostic Models</h1>
         <div className={`grid gap-8 ${submitted ? "grid-cols-2" : "grid-cols-1 justify-center"}`}>
-          {/* Left Section */}
           <div className="space-y-6 place-items-center">
-            {/* Dropdown */}
             <div>
               <label htmlFor="model" className="block text-gray-800 font-semibold mb-2">
                 Select a Model and Upload an Image:
@@ -117,36 +143,32 @@ export default function ModelGarden() {
                 ))}
               </select>
             </div>
-
-            {/* Media Selector */}
             {!file && (
-            <div className="w-1/3 h-4/5 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center flex place-items-center">
+              <div className="w-1/3 h-4/5 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center flex place-items-center">
                 <input
-                type="file"
-                className="hidden"
-                id="file-upload"
-                onChange={handleFileUpload}
+                  type="file"
+                  className="hidden"
+                  id="file-upload"
+                  onChange={handleFileUpload}
                 />
                 <label
-                htmlFor="file-upload"
-                className="cursor-pointer block text-blue-600 font-medium place-items-center"
+                  htmlFor="file-upload"
+                  className="cursor-pointer block text-blue-600 font-medium place-items-center"
                 >
-                <img src="/disk.png" alt="Disk" className=""></img>
-                Click here to upload or drop files here
+                  <img src="/disk.png" alt="Disk" className="" />
+                  Click here to upload or drop files here
                 </label>
-            </div>
+              </div>
             )}
-            {/* Image Preview */}
             {file && (
-            <div className="mt-4 place-items-center">
+              <div className="mt-4 place-items-center">
                 <img
-                src={fileUrl}
-                alt="Uploaded Medical"
-                className="max-w-full h-auto rounded-lg shadow-md"
+                  src={fileUrl}
+                  alt="Uploaded Medical"
+                  className="max-w-full h-auto rounded-lg shadow-md"
                 />
-            </div>
+              </div>
             )}
-            
             {!submitted && (
               <button
                 className={`py-2 px-4 text-white rounded-3xl ${loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"}`}
@@ -157,8 +179,6 @@ export default function ModelGarden() {
               </button>
             )}
           </div>
-
-          {/* Right Section */}
           {submitted && (
             <div className="space-y-6">
               {results && (
@@ -176,17 +196,35 @@ export default function ModelGarden() {
                   </ul>
                 </div>
               )}
-
-              {/* Tabs for Interpretation & Consultation */}
               <div>
                 <div className="flex border-b border-gray-300">
-                  <button className="px-4 py-2 font-bold text-gray-800 border-b-2 border-black">
+                  <button
+                    className={`px-4 py-2 font-bold ${activeTab === "Interpretation" ? "text-gray-800 border-b-2 border-black" : "text-gray-600"}`}
+                    onClick={() => {
+                      setActiveTab("Interpretation");
+                      fetchAIContent("Interpretation");
+                    }}
+                  >
                     Interpretation
                   </button>
-                  <button className="px-4 py-2 text-gray-600">Consultation</button>
+                  <button
+                    className={`px-4 py-2 font-bold ${activeTab === "Consultation" ? "text-gray-800 border-b-2 border-black" : "text-gray-600"}`}
+                    onClick={() => {
+                      setActiveTab("Consultation");
+                      fetchAIContent("Consultation");
+                    }}
+                  >
+                    Consultation
+                  </button>
                 </div>
                 <div className="p-4 bg-white/70 rounded-lg shadow-md">
-                  <p className="text-gray-800">Content for the selected tab will appear here.</p>
+                  {aiLoading ? (
+                    <p className="text-gray-800">Loading...</p>
+                  ) : aiContent ? (
+                    <p className="text-gray-800">{aiContent}</p>
+                  ) : (
+                    <p className="text-gray-800">Select a tab to view content.</p>
+                  )}
                 </div>
               </div>
             </div>
