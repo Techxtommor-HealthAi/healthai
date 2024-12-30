@@ -1,12 +1,19 @@
-import { useState } from "react";
-import questions from './questions.json'
+import { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
+import questions from './questions.json';
 
 const MedicalHistory = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showSummary, setShowSummary] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [cookies] = useCookies(['username']);
+  const router = useRouter();
 
-  
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleOptionSelect = (questionId, option) => {
     setAnswers(prev => ({
@@ -42,6 +49,28 @@ const MedicalHistory = () => {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('/api/activecomplaint', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: cookies.username, answers })
+      });
+
+      if (response.ok) {
+        console.log('Active complaint added successfully');
+        router.push('/');
+      } else {
+        throw new Error('Failed to save active complaint');
+      }
+    } catch (error) {
+      console.error('Error saving active complaint:', error);
+      alert('Error saving active complaint');
+    }
+  };
+
   const groupedQuestions = questions.reduce((acc, question) => {
     if (!acc[question.title]) {
       acc[question.title] = [];
@@ -50,10 +79,14 @@ const MedicalHistory = () => {
     return acc;
   }, {});
 
+  if (!isClient) {
+    return null;
+  }
+
   if (showSummary) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-300 p-6">
-        <div className="w-11/12 md:w-2/3 lg:w-1/2  shadow-md rounded-lg p-6">
+        <div className="w-11/12 md:w-2/3 lg:w-1/2 shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-bold text-teal-600 mb-6 text-center">Medical History Summary</h2>
           
           {Object.entries(groupedQuestions).map(([title, categoryQuestions]) => (
@@ -82,6 +115,12 @@ const MedicalHistory = () => {
             className="bg-teal-500 text-white hover:bg-teal-600 font-semibold py-2 px-4 rounded-lg transition w-full mt-4"
           >
             Edit Responses
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="bg-teal-500 text-white hover:bg-teal-600 font-semibold py-2 px-4 rounded-lg transition w-full mt-4"
+          >
+            Submit
           </button>
         </div>
       </div>

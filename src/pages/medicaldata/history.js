@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from 'next/router';
 
 export default function HealthHistory() {
   const [currentSection, setCurrentSection] = useState("personal"); // Default section
@@ -10,6 +11,7 @@ export default function HealthHistory() {
   const [customInput, setCustomInput] = useState("");
   const [duration, setDuration] = useState("");
   const [showSummary, setShowSummary] = useState(false); // Toggle for summary view
+  const router = useRouter();
 
   const options = {
     personal: ["Alcohol", "Drugs", "Smoking"],
@@ -98,8 +100,31 @@ export default function HealthHistory() {
     setCurrentSection(sections[newIndex]);
   };
 
-  const handleSubmit = () => {
-    alert("Form Submitted Successfully!");
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('/api/healthhistory', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          personalHistory,
+          familyHistory,
+          medicalHistory,
+          allergies: selectedAllergies
+        })
+      });
+
+      if (response.ok) {
+        console.log('Health history added successfully');
+        router.push('/');
+      } else {
+        throw new Error('Failed to save health history');
+      }
+    } catch (error) {
+      console.error('Error saving health history:', error);
+      alert('Error saving health history');
+    }
   };
 
   return (
@@ -194,7 +219,7 @@ export default function HealthHistory() {
                   onChange={(e) => setDuration(e.target.value)}
                   className="flex-1 px-4 py-2 border rounded-lg focus:outline-purple-500"
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     Select Duration
                   </option>
                   <option value="1 month">1 month</option>

@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
 
 export default function UploadReport() {
   const [reportType, setReportType] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [cookies] = useCookies(['username']);
+  const router = useRouter();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -16,7 +20,7 @@ export default function UploadReport() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!reportType || !selectedFile) {
       setErrorMessage("Please fill all fields.");
@@ -24,10 +28,27 @@ export default function UploadReport() {
     }
     setErrorMessage("");
 
-    // Handle file upload logic here
-    console.log("Report Type:", reportType);
-    console.log("Selected File:", selectedFile);
-    alert("Report uploaded successfully!");
+    const formData = new FormData();
+    formData.append('reportType', reportType);
+    formData.append('file', selectedFile);
+    formData.append('username', cookies.username);
+
+    try {
+      const response = await fetch('/api/reports', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        alert('Report uploaded successfully!');
+        router.push('/'); // Redirect to index.js
+      } else {
+        throw new Error('Failed to upload report');
+      }
+    } catch (error) {
+      console.error('Error uploading report:', error);
+      alert('Error uploading report');
+    }
   };
 
   return (

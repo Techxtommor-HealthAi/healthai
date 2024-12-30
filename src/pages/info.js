@@ -1,23 +1,24 @@
-import React from 'react';
-import { useRouter } from 'next/router';
+import React from "react";
+import { useRouter } from "next/router";
 
 const Info = () => {
   const pages = [
-    { name: 'index', path: '/' },
-    { name: 'Chatbot', path: '/chatbot' },
-    { name: 'info', path: '/info' },
-    { name: 'login', path: '/login' },
-    { name: 'ocr', path: '/ocr' },
-    { name: 'signup', path: '/signup' },
-    { name: 'dashboard', path: '/dashboard' },
-    { name: 'activecomplaint', path: '/medicaldata/activecomplaint' },
-    { name: 'history', path: '/medicaldata/history' },
-    { name: 'reports', path: '/medicaldata/reports' },
+    { name: "index", path: "/" },
+    { name: "Chatbot", path: "/chatbot" },
+    { name: "info", path: "/info" },
+    { name: "login", path: "/login" },
+    { name: "ocr", path: "/ocr" },
+    { name: "signup", path: "/signup" },
+    { name: "dashboard", path: "/dashboard" },
+    { name: "activecomplaint", path: "/medicaldata/activecomplaint" },
+    { name: "history", path: "/medicaldata/history" },
+    { name: "reports", path: "/medicaldata/reports" },
+    { name: "userinfo", path: "/userinfo" },
     // Add more pages here, excluding those in the api folder
   ];
 
   const navigateTo = (path) => {
-    window.open(path, '_blank');
+    window.open(path, "_blank");
   };
 
   return (
