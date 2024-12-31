@@ -61,7 +61,7 @@ const MedicalHistory = () => {
 
       if (response.ok) {
         console.log('Active complaint added successfully');
-        router.push('/');
+        router.push('/medicaldata/history');
       } else {
         throw new Error('Failed to save active complaint');
       }

@@ -117,7 +117,7 @@ export default function HealthHistory() {
 
       if (response.ok) {
         console.log('Health history added successfully');
-        router.push('/');
+        router.push('/medicaldata/reports');
       } else {
         throw new Error('Failed to save health history');
       }

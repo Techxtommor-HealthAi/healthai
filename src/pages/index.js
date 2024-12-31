@@ -6,7 +6,7 @@ export default function Home({ username }) {
   
   const cards = [
     {
-      title: "Personalized AI",
+      title: "Complee Health History",
       description: "Get tailored advice just for you.",
       link: "/medicaldata/activecomplaint",
     },

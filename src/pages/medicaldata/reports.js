@@ -41,7 +41,7 @@ export default function UploadReport() {
 
       if (response.ok) {
         alert('Report uploaded successfully!');
-        router.push('/'); // Redirect to index.js
+        router.push('/dashboard'); // Redirect to index.js
       } else {
         throw new Error('Failed to upload report');
       }
