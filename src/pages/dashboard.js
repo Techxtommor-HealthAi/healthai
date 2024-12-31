@@ -110,9 +110,11 @@ const PatientDashboard = () => {
                       </p>
                     </div>
                   </div>
+                  <a href="/userinfo">
                   <button className="mt-4 w-full bg-orange-50 text-orange-500 py-2 px-4 rounded-lg hover:bg-orange-100 transition-colors">
                     Illness History
                   </button>
+                  </a>
                 </div>
               </div>
             </div>
