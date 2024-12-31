@@ -8,7 +8,7 @@ export default function ModelGarden() {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [activeTab, setActiveTab] = useState("Interpretation");
+  const [activeTab, setActiveTab] = useState(null);
   const [aiContent, setAiContent] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
 
