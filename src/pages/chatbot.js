@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { createWorker } from "tesseract.js";
 import Nav from "@/components/nav";
+import axios from "axios";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
@@ -19,11 +20,24 @@ const Chatbot = () => {
   const [isListening, setIsListening] = useState(false);
   const [speechResult, setSpeechResult] = useState("");
 
+  const sampleQuestions = [
+    "What are the symptoms of pneumonia?",
+    "How can I manage sugar spikes after dinner?",
+    "What are the early signs before heart attack?",
+  ];
+
+  const [showSampleQuestions, setShowSampleQuestions] = useState(true);
+
+  const handleSampleQuestionClick = (question) => {
+    setInput(question);
+    setShowSampleQuestions(false);
+  };
+
   useEffect(() => {
     setIsTyping(!!input.trim());
   }, [input]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
       const newMessage = {
         type: "user",
@@ -37,18 +51,33 @@ const Chatbot = () => {
       setInput("");
       setIsLoading(true);
 
-      setTimeout(() => {
+      try {
+        const response = await axios.post("http://127.0.0.1:8001/generate", {
+          prompt: `Assume role of Specialist AI Doctor, Provide a short, precise response for the query: ${input.trim()}`,
+        });
         const botResponse = {
           type: "bot",
-          content: "I'm here to help!",
+          content: response.data.response,
           timestamp: new Date().toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           }),
         };
         setMessages((prevMessages) => [...prevMessages, botResponse]);
+      } catch (error) {
+        console.error("Error fetching AI response:", error);
+        const botResponse = {
+          type: "bot",
+          content: "Sorry, I couldn't process your request at the moment.",
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        };
+        setMessages((prevMessages) => [...prevMessages, botResponse]);
+      } finally {
         setIsLoading(false);
-      }, 1500);
+      }
     }
   };
 
@@ -212,7 +241,35 @@ const Chatbot = () => {
                 </div>
               </div>
             )}
+            {isTyping && (
+              <div className="flex flex-row-reverse items-start space-x-2">
+                <span className="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                  U
+                </span>
+                <div className="max-w-xs px-4 py-2 rounded-3xl shadow bg-gradient-to-r from-teal-500 to-green-400 text-white">
+                  <div className="flex space-x-1">
+                    <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                    <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                    <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
+
+          {showSampleQuestions && (
+            <div className="grid gap-4 mb-4 grid-cols-1 sm:grid-cols-3">
+              {sampleQuestions.map((question, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-white/70 border border-gray-300 rounded-lg shadow-sm cursor-pointer hover:bg-gray-200 transition"
+                  onClick={() => handleSampleQuestionClick(question)}
+                >
+                  <p className="text-gray-800">{question}</p>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="flex items-center space-x-2 sticky bottom-0">
             <button
@@ -243,13 +300,6 @@ const Chatbot = () => {
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 className="w-full px-4 py-2 border rounded-3xl focus:outline-none focus:ring focus:ring-teal-400"
               />
-              {isTyping && (
-                <div className="absolute right-4 top-2 flex space-x-1">
-                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
-                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
-                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
-                </div>
-              )}
             </div>
             <button
               className="flex items-center px-4 py-2 text-white bg-blue-500 rounded-3xl hover:bg-blue-600 focus:outline-none"

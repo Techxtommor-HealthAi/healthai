@@ -6,7 +6,7 @@ export default function Home({ username }) {
   
   const cards = [
     {
-      title: "Complee Health History",
+      title: "Complete Health History",
       description: "Get tailored advice just for you.",
       link: "/medicaldata/activecomplaint",
     },
