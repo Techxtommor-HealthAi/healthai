@@ -5,8 +5,15 @@ import "react-circular-progressbar/dist/styles.css";
 import Nav from "@/components/nav";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
+import { useRouter } from 'next/router';
 
 const PatientDashboard = () => {
+  const router = useRouter();
+  
+  const handleChatWithAIDoctor = () => {
+    router.push('/chatbot');
+  };
+
   // State for login and user details
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -350,6 +357,12 @@ const PatientDashboard = () => {
                     Get instant health advice and insights from our AI-powered
                     doctor assistant.
                   </p>
+                  <button 
+                    onClick={handleChatWithAIDoctor} 
+                    className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    Start Chat
+                  </button>
                 </div>
               </div>
             </div>
