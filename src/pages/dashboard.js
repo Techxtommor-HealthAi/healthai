@@ -4,34 +4,82 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import Nav from "@/components/nav";
 import { useState, useEffect } from "react";
-
+import { useCookies } from "react-cookie";
 
 const PatientDashboard = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
-  const [user, setUser] = useState(null); // Store user information
+  // State for login and user details
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
+  // State for medical history
+  const [data, setData] = useState(null);
+  const [cookies] = useCookies(["username"]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Fetch user session on component mount
   useEffect(() => {
-    // Fetch user session on component mount
-    fetch("/api/session")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
+    const fetchSession = async () => {
+      try {
+        const response = await fetch("/api/session");
+        const result = await response.json();
+        if (result.success) {
           setIsLoggedIn(true);
-          setUser(data.user); // Assuming API sends the user's data
+          setUser(result.user);
         } else {
           setIsLoggedIn(false);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Failed to fetch user session:", err);
         setIsLoggedIn(false);
-      });
+      }
+    };
+
+    fetchSession();
   }, []);
 
+  // Fetch medical history
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isLoggedIn || !cookies.username) return; // Ensure conditions are checked inside the hook
+
+      try {
+        setLoading(true); // Start loading
+        const response = await fetch(
+          `/api/userdata?username=${cookies.username}`
+        );
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to fetch data");
+        }
+        const result = await response.json();
+        setData(result.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    };
+
+    fetchData();
+  }, [isLoggedIn, cookies.username]);
+
+  // Handle render logic
   if (!isLoggedIn) {
-    return <div>Please log in to access the dashboard.</div>; // Or redirect to login page
+    return <div>Please log in to access the dashboard.</div>;
   }
-  
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!data) {
+    return <div>No data found</div>;
+  }
   const bodyCompositionData = {
     oxygen: 45,
     nitrogen: 10,
@@ -58,8 +106,6 @@ const PatientDashboard = () => {
     8.0, 9.5, 2.0, 4.0, 7.0, 1.0, 5.0, 4.5, 3.0, 2.0, 5.0, 6.0,
   ];
 
-
-
   return (
     <div>
       <Nav />
@@ -79,7 +125,7 @@ const PatientDashboard = () => {
                   />
                   <div>
                     <h2 className="text-xl font-semibold text-gray-800">
-                    {user ? user.username : 'Guest'}
+                      {user ? user.username : "Guest"}
                     </h2>
                     <p className="text-gray-500 text-sm">
                       Last Checkup: 04 Jan 2022
@@ -95,7 +141,6 @@ const PatientDashboard = () => {
                     <span className="text-gray-600">Age:</span>
                     <span>{user ? user.age : "N/A"}</span>
                   </div>
-                  
                 </div>
                 <div className="mt-16">
                   <h3 className="text-lg font-medium text-gray-800">
@@ -111,9 +156,9 @@ const PatientDashboard = () => {
                     </div>
                   </div>
                   <a href="/userinfo">
-                  <button className="mt-4 w-full bg-orange-50 text-orange-500 py-2 px-4 rounded-lg hover:bg-orange-100 transition-colors">
-                    Illness History
-                  </button>
+                    <button className="mt-4 w-full bg-orange-50 text-orange-500 py-2 px-4 rounded-lg hover:bg-orange-100 transition-colors">
+                      Illness History
+                    </button>
                   </a>
                 </div>
               </div>
@@ -187,12 +232,33 @@ const PatientDashboard = () => {
             <div className="mb-6">
               {/* Remedies Box */}
               <div className="bg-green-50 rounded-lg p-4 backdrop-blur-lg shadow-xl mb-4">
-                <span className="font-semibold text-gray-700">Remedies:</span>
-                <ul className="list-decimal list-inside text-gray-600 mt-2">
-                  <li>Remedy 1</li>
-                  <li>Remedy 2</li>
-                  <li>Remedy 2</li>
-                </ul>
+                <div>
+                  <h3>Health Histories</h3>
+                  {data.healthHistories?.map((history, index) => (
+                    <div key={history._id || index}>
+                      <h4>Record {index + 1}</h4>
+                      <p>
+                        <strong>Username:</strong> {history.username}
+                      </p>
+                      <p>
+                        <strong>Personal History:</strong>{" "}
+                        {history.personalHistory.join(", ") || "None"}
+                      </p>
+                      <p>
+                        <strong>Family History:</strong>{" "}
+                        {history.familyHistory.join(", ") || "None"}
+                      </p>
+                      <p>
+                        <strong>Medical History:</strong>{" "}
+                        {history.medicalHistory.join(", ") || "None"}
+                      </p>
+                      <p>
+                        <strong>Allergies:</strong>{" "}
+                        {history.allergies.join(", ") || "None"}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
               {/* Top Recommendations Box */}
               <div className="bg-green-50 rounded-lg p-4 backdrop-blur-lg shadow-xl">
