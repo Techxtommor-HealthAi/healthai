@@ -106,8 +106,8 @@ export default function ModelGarden() {
 
     const prompt =
       tab === "Interpretation"
-        ? `Assume role of Specialist AI Doctor, Provide an interpretation for the diagnostic result: ${results.class} with ${results.confidence} confidence in short, patient-friendly way.`
-        : `Assume role of Specialist AI Doctor, Provide an consultation advise for the diagnostic result: ${results.class} with ${results.confidence} confidence in short, patient-friendly way. Donot prescribe any drug, only ayurvedic or home remedies. If severe, make them consult specialist doctor.`;
+        ? `Assume role of Specialist AI Doctor, explain the disease and provide an interpretation for the diagnostic result: ${results.class} with ${results.confidence} confidence in short, patient-friendly way.`
+        : `Assume role of Specialist AI Doctor, provide an consultation advise for the diagnostic result: ${results.class} with ${results.confidence} confidence in short, patient-friendly way. Donot prescribe any drug, only ayurvedic or home remedies. If severe, make them consult specialist doctor.`;
 
     try {
       const response = await axios.post("http://127.0.0.1:8001/generate", { prompt });

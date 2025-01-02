@@ -39,9 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# models
-src/models/braintumor_detection.h5
-src/models/pneumonia_detection.h5
-src/models/skincancer_prediction.keras
-src/models/skininfection_classification.h5
