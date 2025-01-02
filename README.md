@@ -131,31 +131,34 @@ The project successfully demonstrated the potential of AI in transforming health
 ## 9. Screenshots
 
 ### Login Page
-![Login Page](Screenshot/1.png)
+![Login Page](/Screenshots/1.png)
 
 ### Signup Page
-![Signup Page](Screenshot/2.png)
+![Signup Page](/Screenshots/2.png)
 
 ### Home Page
-![Home Page](Screenshot/3.png)
+![Home Page](/Screenshots/3.png)
 
 ### Chatbot Page
-![Chatbot Page](Screenshot/4.png)
+![Chatbot Page](/Screenshots/4.jpg)
 
 ### Dashboard Page
-![Dashboard Page](Screenshot/5.png)
+![Dashboard Page](/Screenshots/5.png)
 
 ### Active Complaint Page
-![Active Complaint Page](Screenshot/6.png)
+![Active Complaint Page](/Screenshots/6.png)
 
 ### History Page
-![History Page](Screenshot/7.png)
+![History Page](/Screenshots/7.png)
 
 ### Reports Page
-![Reports Page](Screenshot/8.png)
+![Reports Page](/Screenshots/8.png)
 
 
 ### Model Garden Page
-![Model Garden Page](Screenshot/9.jpg)
-![Model Garden Page with skin infection model](Screenshot/9a.jpg)
-![Model Garden Page with skin cancer](Screenshot/9b.jpg)
+## All Models
+![Model Garden Page](/Screenshots/9.jpg)
+## Model Garden Page with skin infection model
+![](/Screenshots/9a.jpg)
+## Model Garden Page with skin cancer
+![](/Screenshots/9b.jpg)
