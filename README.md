@@ -26,6 +26,8 @@ The project aims to revolutionize healthcare accessibility and affordability by 
 7. [Conclusion](#7-conclusion)
 8. [References](#8-references)
 9. [Screenshots](#9-screenshots)
+10. [Setup Instructions](#10-setup-instructions)
+11. [Usage Instructions](#11-usage-instructions)
 
 ---
 
@@ -162,3 +164,87 @@ The project successfully demonstrated the potential of AI in transforming health
 ![](/Screenshots/9a.jpg)
 ## Model Garden Page with skin cancer
 ![](/Screenshots/9b.jpg)
+
+---
+
+## 10. Setup Instructions
+
+### Prerequisites
+- Python 3.8+
+- Node.js 14+
+- MongoDB Atlas account
+- Required Python and Node.js packages (listed in `requirements.txt` and `package.json`)
+
+### Setting Up Environment Variables
+1. Create a `.env` file in the root directory of the project.
+2. Add the following environment variables:
+    ```sh
+    MONGODB_URI=your_mongodb_cluster_url
+    GOOGLE_API_KEY=your_google_generative_ai_api_key
+    ```
+3. Alternatively, you can set these variables in your system environment variables through advanced system settings(recommended for GOOGLE_API_KEY).
+
+### Setting Up the Backend (hostlocal.py)
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/Techxtommor-HealthAi/healthai.git
+    cd healthai
+    ```
+2. Create a virtual environment and activate it:
+    ```sh
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
+3. Install the required Python packages:
+    ```sh
+    pip install -r requirements.txt
+    ```
+4. Run the backend server:
+    ```sh
+    cd src
+    uvicorn hostlocal:app --reload
+    ```
+
+### Setting Up the Server (server.js)
+1. Navigate to the server directory:
+    ```sh
+    cd src/pages/api
+    ```
+2. Install the required Node.js packages:
+    ```sh
+    npm install
+    ```
+3. Start the server:
+    ```sh
+    node server.js
+    ```
+
+### Setting Up the Main Website
+1. Navigate to the website directory:
+    ```sh
+    cd healthai
+    ```
+2. Install the required Node.js packages:
+    ```sh
+    npm install
+    ```
+3. Start the development server:
+    ```sh
+    npm run dev
+    ```
+
+---
+
+## 11. Usage Instructions
+
+### Accessing the Main Website
+1. Open your web browser and navigate to `http://localhost:3000`.
+2. Sign up or log in to access the dashboard and other features.
+
+### Using the AI-Powered Diagnostics
+1. Upload image on Garden of Models for diagnosis.
+2. Enter symptoms and other relevant information through the web forms.
+3. Receive real-time diagnostic recommendations and personalized health advice.
+
+### Viewing the Project Report
+You can view the detailed project report [here](https://github.com/Techxtommor-HealthAi/healthai/blob/main/report/Report.pdf).
