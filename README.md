@@ -1,4 +1,5 @@
-# Project Report on AI-Powered Healthcare Assistant for Diagnostics and Recommendations
+# AI-Powered Healthcare Assistant for Diagnostics and Recommendations
+![](/public/cover.jpg)
 
 ## Submitted By
 - Mr Vinay Kamdi (v1nayk4mdi@gmail.com)
