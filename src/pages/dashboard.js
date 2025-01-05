@@ -243,10 +243,7 @@ const PatientDashboard = () => {
                   <h3>Health Histories</h3>
                   {data.healthHistories?.map((history, index) => (
                     <div key={history._id || index}>
-                      <h4>Record {index + 1}</h4>
-                      <p>
-                        <strong>Username:</strong> {history.username}
-                      </p>
+                     
                       <p>
                         <strong>Personal History:</strong>{" "}
                         {history.personalHistory.join(", ") || "None"}
