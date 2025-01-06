@@ -23,6 +23,25 @@ const PatientDashboard = () => {
   const [cookies] = useCookies(["username"]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+
+  const generateTopSuggestions = async (userData) => {
+    const prompt = `Generate top 4 suggestions from the following user data (personal history, family history, medical history, allergies) in 2-3 words each:\n${JSON.stringify(userData)}`;
+    try {
+      const response = await fetch("http://127.0.0.1:8001/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
+      const result = await response.json();
+      return result.response.split('\n').slice(0, 4); // Get top 4 suggestions
+    } catch (error) {
+      console.error("Error generating suggestions:", error);
+      return [];
+    }
+  };
 
   // Fetch user session on component mount
   useEffect(() => {
@@ -61,6 +80,8 @@ const PatientDashboard = () => {
         }
         const result = await response.json();
         setData(result.data);
+        const suggestions = await generateTopSuggestions(result.data);
+        setSuggestions(suggestions);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -269,10 +290,10 @@ const PatientDashboard = () => {
                 <span className="font-semibold text-gray-700">
                   Top Recommendations:
                 </span>
-                <ul className="list-disc list-inside text-gray-600 mt-2">
-                  <li>Recommendation 1</li>
-                  <li>Recommendation 2</li>
-                  <li>Recommendation 3</li>
+                <ul className="list-none list-inside text-gray-600 mt-2">
+                  {suggestions.map((suggestion, index) => (
+                    <li key={index}>{suggestion}</li>
+                  ))}
                 </ul>
               </div>
             </div>
