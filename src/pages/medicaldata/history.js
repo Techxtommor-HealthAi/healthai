@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 export default function HealthHistory() {
   const [currentSection, setCurrentSection] = useState("personal"); // Default section
@@ -12,6 +12,23 @@ export default function HealthHistory() {
   const [duration, setDuration] = useState("");
   const [showSummary, setShowSummary] = useState(false); // Toggle for summary view
   const router = useRouter();
+
+
+
+  const [popupMessage, setPopupMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+
+  // Handle option click for popup
+  const handleOptionClick = (option) => {
+    setPopupMessage(`${option} has been added. View Summary.`);
+    setShowPopup(true);
+
+    // Hide popup automatically after 3 seconds
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 3000);
+  };
+
 
   const options = {
     personal: ["Alcohol", "Drugs", "Smoking"],
@@ -102,28 +119,28 @@ export default function HealthHistory() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('/api/healthhistory', {
-        method: 'POST',
+      const response = await fetch("/api/healthhistory", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           personalHistory,
           familyHistory,
           medicalHistory,
-          allergies: selectedAllergies
-        })
+          allergies: selectedAllergies,
+        }),
       });
 
       if (response.ok) {
-        console.log('Health history added successfully');
-        router.push('/medicaldata/reports');
+        console.log("Health history added successfully");
+        router.push("/medicaldata/reports");
       } else {
-        throw new Error('Failed to save health history');
+        throw new Error("Failed to save health history");
       }
     } catch (error) {
-      console.error('Error saving health history:', error);
-      alert('Error saving health history');
+      console.error("Error saving health history:", error);
+      alert("Error saving health history");
     }
   };
 
@@ -142,6 +159,7 @@ export default function HealthHistory() {
               onClick={() => {
                 setCurrentSection(section);
                 setShowSummary(false);
+              
               }}
               className={`px-4 py-2 font-semibold rounded-lg ${
                 currentSection === section
@@ -153,6 +171,18 @@ export default function HealthHistory() {
             </button>
           ))}
         </div>
+            {/* Popup Notification */}
+      {showPopup && (
+        <div className="fixed bottom-4 right-4 bg-white shadow-lg border border-teal-300 rounded-lg p-4 flex items-center gap-4 animate-slide-in">
+          <p className="text-teal-800">{popupMessage}</p>
+          <button
+            onClick={() => setShowPopup(false)}
+            className="bg-teal-600 text-white px-3 py-1 rounded hover:bg-teal-700"
+          >
+            Close
+          </button>
+        </div>
+      )}
 
         {/* Summary Button */}
         <button
@@ -165,17 +195,20 @@ export default function HealthHistory() {
         {/* Toggle between Summary and Form Sections */}
         {!showSummary ? (
           <>
-            {/* Dynamic Section */}
             <div className="mb-8">
               <h2 className="text-xl font-bold text-teal-600 mb-4">
-                {currentSection.charAt(0).toUpperCase() + currentSection.slice(1)}{" "}
+                {currentSection.charAt(0).toUpperCase() +
+                  currentSection.slice(1)}{" "}
                 History
               </h2>
               <div className="flex flex-wrap gap-4">
                 {options[currentSection].map((option, index) => (
                   <button
                     key={index}
-                    onClick={() => handleAddOption(option)}
+                    onClick={() => {handleAddOption(option);
+                      handleOptionClick(option);
+
+                    }}
                     className="px-4 py-2 bg-teal-100 text-teal-700 font-semibold rounded-full hover:bg-teal-200"
                   >
                     {option}
@@ -191,7 +224,11 @@ export default function HealthHistory() {
                   className="flex-1 px-4 py-2 border rounded-lg focus:outline-teal-500"
                 />
                 <button
-                  onClick={handleAddItem}
+                onClick={() => {
+                  handleOptionClick(customInput);
+                  handleAddItem();
+                }}
+                 
                   className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600"
                 >
                   Add
@@ -199,7 +236,6 @@ export default function HealthHistory() {
               </div>
             </div>
 
-            {/* Navigation Buttons */}
             <div className="mt-8 flex justify-between">
               <button
                 onClick={() => handleNavigation("prev")}
@@ -216,7 +252,6 @@ export default function HealthHistory() {
             </div>
           </>
         ) : (
-          // Summary Section
           <div className="mt-6">
             <h2 className="text-xl font-bold text-teal-600 mb-4">Summary</h2>
             <div className="mb-4">
@@ -243,10 +278,19 @@ export default function HealthHistory() {
                 ))}
               </ul>
             </div>
-          
+            <div className="mb-4">
+              <h3 className="font-semibold">Allergies:</h3>
+              <ul className="list-disc pl-5">
+                {selectedAllergies.map((item, index) => (
+                  <li key={index}>
+                    {item.allergy} - {item.duration}
+                  </li>
+                ))}
+              </ul>
+            </div>
             <button
               onClick={handleSubmit}
-              className="px-6 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
+              className="px-6 py-2 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600"
             >
               Submit
             </button>
