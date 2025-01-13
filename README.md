@@ -238,6 +238,9 @@ The project successfully demonstrated the potential of AI in transforming health
 1. Open your web browser and navigate to `http://localhost:3000`.
 2. Sign up or log in to access the dashboard and other features.
 
+### Testing Models
+Sample images for testing the models in the Model Garden are available in the `TEST` directory. You can use these images to evaluate the performance of different models.
+
 ### Using the AI-Powered Diagnostics
 1. Upload image on Garden of Models for diagnosis.
 2. Enter symptoms and other relevant information through the web forms.
