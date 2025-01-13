@@ -23,9 +23,9 @@ app.add_middleware(
 )
 
 pn = tf.keras.models.load_model("models/pneumonia_detection.h5", compile=False)
-sc_d = tf.keras.models.load_model("models/skincancer_prediction.keras")
+#sc_d = tf.keras.models.load_model("models/skincancer_prediction.keras")
 sd_c = tf.keras.models.load_model("models/skininfection_classification.h5", compile=False)
-#sl_c = tf.keras.models.load_model("models/c_model.h5", compile=False)
+# sl_c = tf.keras.models.load_model("models/c_model.h5", compile=False)
 bt = tf.keras.models.load_model("models/braintumor_detection.h5", compile=False)
 
 # Define Pydantic model for the prediction response
@@ -68,7 +68,6 @@ async def pneumonia_detection(file: UploadFile = File(...)):
         )
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
-    
 
 @app.post("/braintumor_detection", response_model=PredictionResponse)
 async def braintumor_detection(file: UploadFile = File(...)):

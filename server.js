@@ -1,19 +1,19 @@
-import express, { json } from "express";
-import cors from "cors";
-import multer from "multer";
-import fs from "fs";
-import path from "path";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from "dotenv";
-import tesseract from "tesseract.js";
-import pdfParse from "pdf-parse";
-import mammoth from "mammoth";
+const express = require("express");
+const cors = require("cors");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const dotenv = require("dotenv");
+const tesseract = require("tesseract.js");
+const pdfParse = require("pdf-parse");
+const mammoth = require("mammoth");
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(json());
+app.use(express.json());
 
 // Setup file storage using Multer
 const upload = multer({ dest: "uploads/" });
@@ -87,7 +87,11 @@ app.post("/extract", upload.single("file"), async (req, res) => {
     res.json({ extractedText, analyzedDetails: result.response.text() });
   } catch (error) {
     console.error("Error processing file:", error);
-    res.status(500).json({ error: "Failed to process file" });
+    if (error.status === 400 && error.statusText === 'Bad Request') {
+      res.status(400).json({ error: "Invalid API key. Please provide a valid API key." });
+    } else {
+      res.status(500).json({ error: "Failed to process file" });
+    }
   } finally {
     // Cleanup uploaded file
     fs.unlinkSync(filePath);
@@ -101,7 +105,11 @@ app.post("/generate", async (req, res) => {
     res.json({ response: result.response.text() });
   } catch (error) {
     console.error("Error generating content:", error);
-    res.status(500).json({ error: "Failed to generate content" });
+    if (error.status === 400 && error.statusText === 'Bad Request') {
+      res.status(400).json({ error: "Invalid API key. Please provide a valid API key." });
+    } else {
+      res.status(500).json({ error: "Failed to generate content" });
+    }
   }
 });
 

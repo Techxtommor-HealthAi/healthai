@@ -171,7 +171,7 @@ The project successfully demonstrated the potential of AI in transforming health
 ## 10. Setup Instructions
 
 ### Prerequisites
-- Python 3.8+
+- [Python 3.12.6](https://www.python.org/downloads/release/python-3126/)
 - Node.js 14+
 - MongoDB Atlas account
 - Required Python and Node.js packages (listed in `requirements.txt` and `package.json`)
@@ -183,7 +183,7 @@ The project successfully demonstrated the potential of AI in transforming health
     MONGODB_URI=your_mongodb_cluster_url
     GOOGLE_API_KEY=your_google_generative_ai_api_key
     ```
-3. Alternatively, you can set these variables in your system environment variables through advanced system settings(recommended for GOOGLE_API_KEY).
+3. Alternatively, you can set these variables in your system environment variables through advanced system settings    (recommended for GOOGLE_API_KEY).
 
 ### Setting Up the Backend (hostlocal.py)
 1. Clone the repository:
@@ -191,10 +191,10 @@ The project successfully demonstrated the potential of AI in transforming health
     git clone https://github.com/Techxtommor-HealthAi/healthai.git
     cd healthai
     ```
-2. Create a virtual environment and activate it:
+2. Create a virtual environment and activate it (ensure you are using [Python 3.12.6](https://www.python.org/downloads/release/python-3126/)):
     ```sh
     python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    venv\Scripts\activate
     ```
 3. Install the required Python packages:
     ```sh
@@ -207,15 +207,11 @@ The project successfully demonstrated the potential of AI in transforming health
     ```
 
 ### Setting Up the Server (server.js)
-1. Navigate to the server directory:
-    ```sh
-    cd src/pages/api
-    ```
-2. Install the required Node.js packages:
+1. Install the required Node.js packages:
     ```sh
     npm install
     ```
-3. Start the server:
+2. Start the server:
     ```sh
     node server.js
     ```

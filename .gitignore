@@ -12,7 +12,7 @@
 
 # testing
 /coverage
-
+/venv
 # next.js
 /.next/
 /out/
@@ -40,4 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-reports.js
+# Python cache
+src/__pycache__
+middleware/__pycache__
