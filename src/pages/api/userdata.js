@@ -3,6 +3,7 @@ import path from 'path';
 import connectDB from '../../utils/db';
 import ActiveComplaint from '../../models/ActiveComplaint';
 import HealthHistories from '../../models/HealthHistories';
+import questions from '../medicaldata/questions.json';
 
 export default async (req, res) => {
   await connectDB();
@@ -18,7 +19,7 @@ export default async (req, res) => {
       const activeComplaint = await ActiveComplaint.findOne({ username });
       const healthHistories = await HealthHistories.find({ username });
 
-      const userDir = path.join(process.cwd(), 'public/reports', username);
+      const userDir = path.join(process.cwd(), 'public/report', username);
       let images = [];
 
       if (fs.existsSync(userDir)) {
@@ -36,10 +37,22 @@ export default async (req, res) => {
         return res.status(404).json({ success: false, message: 'No data found for the user' });
       }
 
+      const activeComplaintWithTitles = activeComplaint ? {
+        ...activeComplaint._doc,
+        answers: Object.entries(activeComplaint.answers).map(([questionId, answer]) => {
+          const question = questions.find(q => q.id === parseInt(questionId));
+          return {
+            questionId,
+            title: question ? question.title : 'Unknown',
+            ...answer
+          };
+        })
+      } : null;
+
       res.status(200).json({
         success: true,
         data: {
-          activeComplaint,
+          activeComplaint: activeComplaintWithTitles,
           healthHistories,
           images
         }

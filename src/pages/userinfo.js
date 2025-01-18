@@ -62,7 +62,7 @@ const UserData = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.images.map((image) => (
               <div key={image.reportType} className="text-center">
-                <img src={`/reports/${cookies.username}/${image.filename}`} alt={image.reportType} className="w-full max-w-xs mx-auto" />
+                <img src={`/report/${cookies.username}/${image.reportType}.png`} alt={image.reportType} className="w-full max-w-xs mx-auto" />
                 <p className="mt-2 text-gray-700">{image.reportType}</p>
               </div>
             ))}

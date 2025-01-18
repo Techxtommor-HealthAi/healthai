@@ -1,28 +1,19 @@
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
+import axios from "axios"; // Add axios for making HTTP requests
 
 export default function UploadReport() {
   const [reportType, setReportType] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [extractedText, setExtractedText] = useState("");
-  const [analyzedDetails, setAnalyzedDetails] = useState("");
   const [cookies] = useCookies(["username"]);
   const router = useRouter();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (
-      file &&
-      ![
-        "image/png",
-        "image/jpeg",
-        "application/pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ].includes(file.type)
-    ) {
-      setErrorMessage("Only PNG, JPEG, PDF, or DOCX files are allowed.");
+    if (file && file.type !== "image/png") {
+      setErrorMessage("Only PNG files are allowed.");
       setSelectedFile(null);
     } else {
       setErrorMessage("");
@@ -44,21 +35,14 @@ export default function UploadReport() {
     formData.append("username", cookies.username);
 
     try {
-      const response = await fetch("/extract", {
-        method: "POST",
-        body: formData,
+      await axios.post("/api/uploadReport", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        setExtractedText(data.extractedText);
-        setAnalyzedDetails(data.analyzedDetails);
-      } else {
-        throw new Error("Failed to process the file.");
-      }
+      router.push("/dashboard"); // Redirect to success page after upload
     } catch (error) {
-      console.error("Error processing file:", error);
-      alert("Error processing file");
+      setErrorMessage("Failed to upload the report.");
     }
   };
 
@@ -97,13 +81,14 @@ export default function UploadReport() {
             htmlFor="file"
             className="block text-gray-700 font-medium mb-2"
           >
-            Add Health Record (PNG, JPEG, PDF, or DOCX only)
+            Add Health Record (PNG only)
           </label>
           <input
             type="file"
             id="file"
             onChange={handleFileChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            accept="image/png"
           />
         </div>
         {errorMessage && (
@@ -111,25 +96,11 @@ export default function UploadReport() {
         )}
         <button
           type="submit"
-          className="w-full bg-teal-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-teal-600 transition"
+          className="w-full bg-teal-200 text-gray-800 text-white font-medium py-2 px-4 rounded-lg hover:bg-indigo-700 transition"
         >
           Submit
         </button>
       </form>
-      {extractedText && (
-        <div className="mt-8 p-6 bg-white rounded-lg shadow-md w-full max-w-md">
-          <h3 className="text-xl font-bold mb-4 text-teal-600">
-            Extracted Text
-          </h3>
-          <pre className="text-gray-800 whitespace-pre-wrap">{extractedText}</pre>
-          <h3 className="text-xl font-bold mt-6 mb-4 text-teal-600">
-            Analyzed Details
-          </h3>
-          <pre className="text-gray-800 whitespace-pre-wrap">
-            {analyzedDetails}
-          </pre>
-        </div>
-      )}
     </div>
   );
 }

@@ -5,13 +5,13 @@ import "react-circular-progressbar/dist/styles.css";
 import Nav from "@/components/nav";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 const PatientDashboard = () => {
   const router = useRouter();
-  
+
   const handleChatWithAIDoctor = () => {
-    router.push('/chatbot');
+    router.push("/chatbot");
   };
 
   // State for login and user details
@@ -26,7 +26,9 @@ const PatientDashboard = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const generateTopSuggestions = async (userData) => {
-    const prompt = `Generate top 4 suggestions from the following user data (personal history, family history, medical history, allergies) in 2-3 words each:\n${JSON.stringify(userData)}`;
+    const prompt = `Generate top 4 remedies from the following user data (personal history, family history, medical history, allergies) in 7 words each:\n${JSON.stringify(
+      userData
+    )}`;
     try {
       const response = await fetch("http://127.0.0.1:8001/generate", {
         method: "POST",
@@ -36,7 +38,7 @@ const PatientDashboard = () => {
         body: JSON.stringify({ prompt }),
       });
       const result = await response.json();
-      return result.response.split('\n').slice(0, 4); // Get top 4 suggestions
+      return result.response.split("\n").slice(0, 4); // Get top 4 suggestions
     } catch (error) {
       console.error("Error generating suggestions:", error);
       return [];
@@ -264,7 +266,6 @@ const PatientDashboard = () => {
                   <h3>Health Histories</h3>
                   {data.healthHistories?.map((history, index) => (
                     <div key={history._id || index}>
-                     
                       <p>
                         <strong>Personal History:</strong>{" "}
                         {history.personalHistory.join(", ") || "None"}
@@ -375,8 +376,8 @@ const PatientDashboard = () => {
                     Get instant health advice and insights from our AI-powered
                     doctor assistant.
                   </p>
-                  <button 
-                    onClick={handleChatWithAIDoctor} 
+                  <button
+                    onClick={handleChatWithAIDoctor}
                     className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
                   >
                     Start Chat

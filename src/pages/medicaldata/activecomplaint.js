@@ -30,13 +30,21 @@ const MedicalHistory = () => {
   }, []);
 
   const handleOptionSelect = (questionId, option) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: {
-        selected: option,
-        details: option === "No" ? "" : (prev[questionId]?.details || "")
-      }
-    }));
+    setAnswers(prev => {
+      const selectedOptions = prev[questionId]?.selected || [];
+      const isSelected = selectedOptions.includes(option);
+      const newSelectedOptions = isSelected
+        ? selectedOptions.filter(opt => opt !== option)
+        : [...selectedOptions, option];
+
+      return {
+        ...prev,
+        [questionId]: {
+          selected: newSelectedOptions,
+          details: newSelectedOptions.length === 0 ? "" : (prev[questionId]?.details || "")
+        }
+      };
+    });
   };
 
   const handleDetailChange = (questionId, details) => {
@@ -97,7 +105,7 @@ const MedicalHistory = () => {
           {Object.entries(answers).map(([questionId, answer]) => (
             <div key={questionId} className="mb-4">
               <h3 className="text-lg font-bold text-gray-800">{questions.find(q => q.id === parseInt(questionId)).description}</h3>
-              <p>Response: {answer.selected}</p>
+              <p>Response: {answer.selected.join(", ")}</p>
               {answer.details && <p>Details: {answer.details}</p>}
             </div>
           ))}
@@ -132,17 +140,21 @@ const MedicalHistory = () => {
 
         <div className="flex justify-center mt-6 space-x-4">
           {currentQuestion === 0 ? (
-            <select
-              onChange={(e) => handleOptionSelect(questions[currentQuestion].id, e.target.value)}
-              className="bg-white border-2 border-teal-500 text-gray-700 py-2 px-4 rounded"
-            >
-              <option value="">Select a symptom</option>
+            <div className="flex flex-wrap justify-center">
               {symptomsOptions.map((symptom) => (
-                <option key={symptom} value={symptom}>
+                <button
+                  key={symptom}
+                  onClick={() => handleOptionSelect(questions[currentQuestion].id, symptom)}
+                  className={`${
+                    answers[questions[currentQuestion].id]?.selected?.includes(symptom)
+                      ? "bg-teal-500 text-white" // Active button styling
+                      : "bg-gray-200 text-teal-700 hover:bg-gray-300" // Default styling
+                  } font-semibold py-2 px-4 m-2 rounded-lg shadow transition`}
+                >
                   {symptom}
-                </option>
+                </button>
               ))}
-            </select>
+            </div>
           ) : (
             questions[currentQuestion].options.map((option) => (
               <button
